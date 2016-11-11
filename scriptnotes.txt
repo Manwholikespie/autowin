@@ -1,0 +1,55 @@
+# Autowin Notes
+cyberpatriot script (autowin) to do list:
+
+When tiger and rkhunter install, they prompt you to fill in some information regarding yourself. This needs to be fixed.
+
+here are some more checklists to look at. The first one has some   
+http://www.tecmint.com/linux-server-hardening-security-tips/  
+	nice stuff for chkconfig…  
+
+
+http://www.cyberciti.biz/tips/linux-security.html  
+	account management (/etc/shadow)  
+
+
+https://www.nsa.gov/ia/_files/factsheets/rhel5-pamphlet-i731.pdf  
+	beautiful table with outdated software/services  
+
+
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/pdf/Security_Guide/Red_Hat_Enterprise_Linux-6-Security_Guide-en-US.pdf  
+	red hat security guide!!!  
+
+
+
+http://www.ibm.com/developerworks/linux/tutorials/l-harden-server/
+	firewall section, logwatch; good resources (guides and tools!)
+
+
+
+
+
+
+
+
+
+
+
+
+look @ clamav documentation at http://www.clamav.net/index.html
+
+	
+old services:
+inetd
+xinetd
+ypserv
+tftp-server
+telnet-server
+rsh-serve
+
+http://www.commandlinefu.com/commands/browse/sort-by-votes
+
+
+
+
+
+#todo: research lynis, auditd, bum, hardinfo, bastille, nessus, openVAS
